@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XJTM X DHANZ - Submit</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Definisi Warna Biru Kehijauan Neon --- */
+        :root {
+            --neon-cyan: #2563eb;
+            --neon-cyan-shadow: rgba(37, 99, 235, 0.8);
+            --dark-background: #1a1a1a;
+            --button-base: #2563eb;
+            --button-active: #2563eb;
+            --text-color: #ffffff;
+            --placeholder-color: #cccccc;
+            /* 🚨 Warna Baru untuk Musik 🚨 */
+            --music-purple: #2563eb; /* MediumPurple */
+            --music-purple-shadow: rgba(147, 112, 219, 0.7);
+        }
+
+        /* --- CSS Dasar dan Neon --- */
+        body {
+            background-color: #000;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            color: var(--text-color);
+            padding: 20px;
+        }
+
+        .BUG-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 18px;
+            border-radius: 15px;
+            background-color: var(--dark-background); 
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 25px var(--neon-cyan-shadow);
+            text-align: center;
+        }
+
+        /* ================================================= */
+        /* 🚨 GAYA BARU: TEKS LEVEL AKSES (PALING ATAS) 🚨 */
+        /* ================================================= */
+        #accessLevelDisplay {
+            color: #2563eb; /* Warna biru neon*/
+            font-family: 'VT323', monospace; 
+            font-size: 1.2em;
+            text-align: right; 
+            padding-bottom: 50px; 
+            margin-bottom: -40px; /* Tarik ke atas agar dekat border atas */
+            text-shadow: 0 0 15px rgba(37, 99, 235, 0.8),0 0 10px rgba(37, 99, 235, 0.8);
+            animation: text-flicker 10s infinite alternate; /* Efek kedipan halus */
+        }
+        
+        /* Animasi Flicker untuk Teks */
+        @keyframes text-flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.95; }
+            55% { opacity: 1; }
+            60% { opacity: 1.2; }
+            65% { opacity: 10; }
+        }
+
+        h2 {
+            color: var(--neon-cyan);
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.9em;
+            text-shadow: 0 0 10px var(--neon-cyan-shadow);
+            margin-bottom: 50px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid var(--neon-cyan);
+            background-color: #0d0d0d;
+            color: var(--text-color);
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 1.1em;
+            outline: none;
+            font-family: 'VT323', monospace;
+        }
+        
+        .input-field::placeholder {
+            color: var(--placeholder-color);
+        }
+
+        /* ================================================= */
+        /* 🚨 ANIMASI PULSE BARU UNTUK SEMUA TOMBOL 🚨 */
+        /* ================================================= */
+        @keyframes button-pulse {
+            0% { transform: scale(1.1); }
+            50% { transform: scale(1.02); } /* Sedikit membesar */
+            100% { transform: scale(1); }
+        }
+
+        .submit-button,
+        .play-button,
+        .logout-button,
+        .create-account-button {
+            animation: button-pulse 1.5s infinite ease-in-out; /* Terapkan animasi */
+            transform-origin: center; /* Pastikan skala dari tengah */
+        }
+        /* ================================================= */
+
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            background-color: var(--button-base); 
+            color: #000000; 
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px var(--neon-cyan-shadow);
+            font-family: 'Press Start 2P', cursive;
+            margin-top: 10px;
+            margin-bottom: 20px; 
+        }
+        .submit-button:hover { 
+            background-color: var(--button-active); 
+            box-shadow: 0 0 20px var(--neon-cyan-shadow);
+        }
+        
+        .logout-button {
+            background-color: transparent;
+            color: #FF4500; /* Merah Oranye */
+            border: 5px solid #FF4500;
+            box-shadow: none;
+            font-family: 'VT323', monospace;
+            padding: 10px 15px;
+            width: auto;
+            margin-top: 20px;
+        }
+        .logout-button:hover {
+            background-color: rgba(255, 69, 0, 0.2);
+            box-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+        }
+
+        /* --- Gaya Select Kustom --- */
+        .custom-select-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .custom-select-bug {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 2px solid var(--neon-cyan);
+            background-color: #0d0d0d;
+            color: var(--text-color);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-family: 'VT323', monospace;
+        }
+        
+        .bug-options {
+            display: none;
+            position: absolute;
+            width: 95%;
+            background-color: #0d0d0d;
+            border: 2px solid var(--neon-cyan);
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            z-index: 10;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .bug-options.show {
+            display: block;
+        }
+        
+        .bug-options div {
+            padding: 10px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            color: var(--text-color);
+        }
+        
+        .bug-options div:last-child {
+            border-bottom: none;
+        }
+        
+        .bug-options div:hover {
+            background-color: rgba(0, 255, 255, 0.2);
+        }
+
+        /* --- Modal Alert Kustom --- */
+        #customAlert {
+            display: none; 
+            position: fixed;
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); 
+            justify-content: center;
+            align-items: center;
+        }
+
+        .alert-content {
+            background-color: var(--dark-background);
+            padding: 3px;
+            border: 2px solid #FF4500; /* Neon Merah/Oranye */
+            box-shadow: 0 0 20px rgba(255, 69, 0, 0.8);
+            width: 80%;
+            max-width: 350px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .alert-message {
+            color: #FF4500; 
+            font-size: 1.9em;
+            font-family: 'VT323', monospace;
+            white-space: pre-line; 
+            line-height: 5;
+            margin-bottom: 20px;
+        }
+        
+        .alert-button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-family: 'VT323', monospace;
+            border: 1px solid #FF4500;
+            background-color: #FF6347;
+            color: black;
+            box-shadow: 0 0 5px rgba(255, 69, 0, 0.5);
+        }
+        
+        /* ================================================= */
+        /* 🚨 GAYA PEMUTAR MUSIK 🚨 */
+        /* ================================================= */
+
+        .music-player-container {
+            width: 100%;
+            margin-top: 40px; 
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1); 
+            text-align: center;
+        }
+
+        .music-player-container h3 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.9em;
+            color: var(--text-color);
+            margin-bottom: 20px;
+        }
+
+        /* Tombol PLAY/PAUSE Besar */
+        .play-button {
+            width: 100%;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 20px; /* Bentuk kapsul */
+            background-color: var(--music-purple);
+            color: var(--text-color);
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 20px var(--music-purple-shadow);
+            transition: all 0.2s;
+            margin-bottom: 20px;
+            font-family: 'VT323', monospace;
+        }
+
+        .play-button:hover {
+            background-color: #A083E1; 
+            box-shadow: 0 0 30px var(--music-purple);
+        }
+
+        /* Kontrol Volume */
+        .volume-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .volume-controls span {
+            font-size: 1.5em;
+            margin: 0 10px;
+            color: var(--text-color);
+        }
+
+        .volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 70%;
+            height: 8px;
+            background: #555;
+            outline: none;
+            opacity: 0.9;
+            transition: opacity 0.2s;
+            border-radius: 4px;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--music-purple);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--music-purple);
+        }
+
+        /* Timeline (Dibawah Volume) */
+        .timeline-container {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: 'VT323', monospace;
+            font-size: 0.9em;
+        }
+        
+        .time-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 3px;
+            background: #333;
+            outline: none;
+            opacity: 0.7;
+            border-radius: 1.5px;
+        }
+        
+        .time-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 0;
+            height: 0;
+        }
+        
+        /* Waktu Current/Total */
+        .current-time, .total-time {
+            margin: 0 5px;
+            color: #ccc;
+        }
+
+        /* ================================================= */
+        /* 🚨 GAYA TOMBOL AKUN BARU (Paling Bawah) 🚨 */
+        /* ================================================= */
+
+        .create-account-button {
+            width: 60%; /* Dikecilkan dari 100% */
+            padding: 8px 15px; /* Dikecilkan */
+            border: none;
+            background-color: var(--button-base); 
+            color: #000000; 
+            font-size: 0.9em; /* Font lebih kecil */
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-family: 'Press Start 2P', cursive;
+            margin-top: 30px; /* Jarak dari atas */
+            position: relative; /* Penting untuk efek neon */
+            z-index: 1;
+            overflow: hidden; /* Sembunyikan efek sebelum terpotong */
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5); /* Shadow dasar */
+        }
+
+        .create-account-button:before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(60deg, transparent, var(--neon-cyan), transparent);
+            animation: neon-border 10s linear infinite; /* Animasi bergerak */
+            z-index: -5;
+        }
+
+        .create-account-button:hover:before {
+            opacity: 1;
+        }
+        
+        /* DEFINISI ANIMASI */
+        @keyframes neon-border {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+    </style>
+</head>
+<body>
+    
+    <div class="BUG-container">
+        
+        <div id="accessLevelDisplay">Akses Level: ROLE</div>
+        
+        <h2>JTMCRASHER X DHANZ</h2>
+
+        <form id="bugForm">
+            <input type=number id="targetNumber" class="input-field" placeholder="Target Number: (628...)" required>
+
+            <div class="custom-select-wrapper">
+                <div id="customSelectBug" class="custom-select-bug">
+                    <span id="selectedBugText">Pilih Bug</span>
+                    <span>▼</span>
+                </div>
+                <div id="bugOptionsList" class="bug-options">
+                    <div data-value="bug1">crash invis</div>
+                    <div data-value="bug2">blank virus</div>
+                     <div data-value="bug3">atacker trojan</div>
+                       <div data-value="bug3">crash malware</div>
+                         <div data-value="bug3">buldozer</div>
+                 
+                    <input type="hidden" id="selectBugValue" name="selectBugValue">
+                </div>
+            </div>
+
+            <button type="submit" class="submit-button">SEND BUG</button>
+        </form>
+        
+        <div class="music-player-container">
+            <h3>BACKGROUND MUSIC</h3>
+            
+            <audio id="backgroundMusic" loop>
+                <source src="https://files.catbox.moe/dlc98a.mp3" type="audio/mp4">
+                </audio>
+
+            <button id="playPauseButton" class="play-button">► PLAY</button>
+
+            <div class="volume-controls">
+                <span>🔈</span>
+                <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.01" value="0.5">
+                <span>🔊</span>
+            </div>
+            
+            <div class="timeline-container">
+                <span id="currentTime" class="current-time">0:00</span>
+                <input type="range" id="timeSlider" class="time-slider" min="0" max="100" value="0" disabled>
+                <span id="totalTime" class="total-time">0:00</span>
+            </div>
+
+        </div>
+        
+        <button id="logoutButton" class="submit-button logout-button">LOGOUT</button>
+        
+        <button id="createAccountButton" class="create-account-button">BUAT AKUN BARU</button>
+        
+    </div>
+
+    <div id="customAlert">
+        <div class="alert-content">
+            <div id="alertMessageContent" class="alert-message"></div>
+            <button id="alertCloseButton" class="alert-button">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // --- Variabel Skrip yang Sudah Ada ---
+        const customSelectBug = document.getElementById('customSelectBug');
+        const bugOptionsList = document.getElementById('bugOptionsList');
+        const bugOptions = bugOptionsList.querySelectorAll('div');
+        const selectedBugText = document.getElementById('selectedBugText');
+        const selectBugValue = document.getElementById('selectBugValue');
+        const bugForm = document.getElementById('bugForm');
+        const createAccountButton = document.getElementById('createAccountButton');
+        const logoutButton = document.getElementById('logoutButton');
+        const customAlert = document.getElementById('customAlert');
+        const alertMessageContent = document.getElementById('alertMessageContent');
+        const alertCloseButton = document.getElementById('alertCloseButton');
+        
+        // 🚨 VARIABEL BARU 🚨
+        const accessLevelDisplay = document.getElementById('accessLevelDisplay');
+        // 🚨 END VARIABEL BARU 🚨
+
+        // --- Variabel Skrip Musik ---
+        const musicPlayer = document.getElementById('backgroundMusic');
+        const playPauseButton = document.getElementById('playPauseButton');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const currentTimeDisplay = document.getElementById('currentTime');
+        const totalTimeDisplay = document.getElementById('totalTime');
+        const timeSlider = document.getElementById('timeSlider');
+
+
+        // --- Logika Alert Kustom ---
+        function showAlert(message) {
+            alertMessageContent.innerHTML = message;
+            customAlert.style.display = 'flex';
+        }
+
+        alertCloseButton.onclick = function() {
+            customAlert.style.display = 'none';
+        }
+
+        // --- Sembunyikan tombol untuk role member ---
+        const userRole = localStorage.getItem('userRole');
+
+        // 🚨 LOGIKA BARU UNTUK MENAMPILKAN ROLE 🚨
+        if (userRole) {
+            // Ubah format role menjadi huruf kapital dan tampilkan
+            accessLevelDisplay.textContent = `Akses Level: ${userRole.toUpperCase()}`;
+        } else {
+            // Jika role tidak ditemukan, tampilkan "GUEST"
+            accessLevelDisplay.textContent = 'Akses Level: GUEST';
+        }
+        // 🚨 END LOGIKA BARU 🚨
+
+        if (userRole === 'member') {
+            createAccountButton.style.display = 'none';
+        }
+
+        // 1. Tombol Logout
+        logoutButton.addEventListener('click', function() {
+            localStorage.removeItem('userRole'); 
+            window.location.href = 'login.html'; 
+        });
+
+        // 2. Togle Dropdown Bug
+        customSelectBug.addEventListener('click', function() {
+            bugOptionsList.classList.toggle('show');
+            customSelectBug.classList.toggle('open');
+        });
+
+        // 3. Pilih Opsi Dropdown Bug
+        bugOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                selectedBugText.textContent = this.textContent;
+                selectBugValue.value = this.getAttribute('data-value');
+                bugOptionsList.classList.remove('show');
+                customSelectBug.classList.remove('open');
+            });
+        });
+
+        // Tutup dropdown jika klik di luar
+        document.addEventListener('click', function(e) {
+            if (!customSelectBug.contains(e.target) && !bugOptionsList.contains(e.target)) {
+                bugOptionsList.classList.remove('show');
+                customSelectBug.classList.remove('open');
+            }
+        });
+
+        // 4. Submit Form
+        bugForm.addEventListener('submit', function(event) {
+            event.preventDefault(); 
+
+            const target = document.getElementById('targetNumber').value;
+            const bug = selectBugValue.value;
+
+            if (target && bug) {
+                window.location.href = 'vidio.html'; 
+            } else {
+                let errorMessage = "";
+                
+                if (!target && !bug) {
+                    errorMessage = "⚠️ Error<br>Target Number and Select Bug are required.";
+                } else if (!target) {
+                    errorMessage = "⚠️ Error<br>Target Number is required.";
+                } else if (!bug) {
+                    errorMessage = "⚠️ Error<br>Tolong Sesuaikan Bug Pilihan Anda"; 
+                }
+
+                showAlert(errorMessage);
+            }
+        });
+
+        // 5. Fungsi untuk Tombol BUAT AKUN BARU
+        createAccountButton.addEventListener('click', function() {
+            window.location.href = 'create_account.html'; 
+        });
+        
+        /* ================================================= */
+        /* LOGIKA PEMUTAR MUSIK */
+        /* ================================================= */
+
+        // Fungsi utilitas untuk format waktu
+        function formatTime(seconds) {
+            const min = Math.floor(seconds / 60);
+            const sec = Math.floor(seconds % 60);
+            return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+        }
+        
+        // 1. Logika Tombol Play/Pause
+        playPauseButton.addEventListener('click', () => {
+            if (musicPlayer.paused) {
+                musicPlayer.play();
+                playPauseButton.textContent = '⏸ PAUSE';
+            } else {
+                musicPlayer.pause();
+                playPauseButton.textContent = '► PLAY';
+            }
+        });
+        
+        // 2. Logika Volume Slider
+        volumeSlider.addEventListener('input', () => {
+            musicPlayer.volume = volumeSlider.value;
+        });
+        
+        // Atur volume awal saat halaman dimuat dan coba putar
+        document.addEventListener('DOMContentLoaded', () => {
+            musicPlayer.volume = volumeSlider.value; 
+            musicPlayer.play().then(() => {
+                playPauseButton.textContent = '⏸ PAUSE';
+            }).catch(() => {
+                playPauseButton.textContent = '► PLAY';
+            });
+        });
+        
+        // 3. Logika Update Waktu dan Timeline
+        musicPlayer.addEventListener('loadedmetadata', () => {
+            totalTimeDisplay.textContent = formatTime(musicPlayer.duration);
+            timeSlider.max = musicPlayer.duration;
+            timeSlider.value = musicPlayer.currentTime;
+        });
+
+        musicPlayer.addEventListener('timeupdate', () => {
+            currentTimeDisplay.textContent = formatTime(musicPlayer.currentTime);
+            timeSlider.value = musicPlayer.currentTime;
+        });
+
+        // Catatan: Karena tidak ada dropdown musik, bagian ini dikosongkan.
+        // Jika Anda menambahkan dropdown musik di masa depan, tambahkan logikanya di sini.
+        
+    </script>
+
+</body>
+</html>

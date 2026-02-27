@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dhanz BUG - WhatsApp Solution</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Mode Malam (Default) */
+            --bg-color: #000000;
+            --text-color-primary: #ffffff;
+            --text-color-secondary: #cccccc;
+            --header-background: rgba(26, 26, 26, 0.9);
+            --button-color: #2563eb; /* Biru sesuai tema login */
+            --button-glow: rgba(37, 99, 235, 0.6);
+        }
+
+        /* Mode Terang */
+        .light-mode {
+            --bg-color: #f4f4f4;
+            --text-color-primary: #1a1a1a;
+            --text-color-secondary: #555555;
+            --header-background: rgba(255, 255, 255, 0.9);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color-primary);
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            transition: 0.3s;
+            background-image: radial-gradient(circle at center, #111 0%, #000 100%);
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 0;
+            background: var(--header-background);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+            color: var(--button-color);
+        }
+
+        .content {
+            text-align: center;
+            padding: 20px;
+            max-width: 600px;
+        }
+
+        .content h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        .content p {
+            color: var(--text-color-secondary);
+            margin-bottom: 30px;
+        }
+
+        /* TOMBOL MASUK DENGAN LOGIKA AUTO-LOGIN */
+        .btn-masuk {
+            display: inline-block;
+            padding: 18px 40px;
+            background-color: var(--button-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            box-shadow: 0 10px 20px var(--button-glow);
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-masuk:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px var(--button-glow);
+        }
+
+        #themeToggle {
+            background: none;
+            border: none;
+            color: var(--text-color-primary);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Footer Simple */
+        footer {
+            position: fixed;
+            bottom: 20px;
+            font-size: 12px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">DHANZ BUG</div>
+        <button id="themeToggle"><i class="fas fa-moon"></i></button>
+    </header>
+
+    <div class="content">
+        <h1>Xjtm-Crasher</h1>
+        <p>このウェブサイトは個人的な目的のために開発されたものであり、コードを盗用しないでください。</p>
+        
+        <button class="btn-masuk" onclick="handleEntry()">mulai</button>
+    </div>
+
+    <footer>
+        &copy; 2024 dhanz. All Rights Reserved.
+    </footer>
+
+    <script>
+        // --- 1. LOGIKA AUTO-LOGIN ---
+        function handleEntry() {
+            // Periksa apakah ada Sesi Login (userRole) di LocalStorage
+            const userSession = localStorage.getItem('userRole');
+
+            if (userSession) {
+                // Jika sudah login, langsung lempar ke Dashboard
+                window.location.href = "dashboard.html";
+            } else {
+                // Jika belum login, arahkan ke Halaman Login
+                window.location.href = "login.html";
+            }
+        }
+
+        // --- 2. LOGIKA TEMA (DARK/LIGHT MODE) ---
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        // Cek preferensi tema sebelumnya
+        if (localStorage.getItem('theme') === 'light') {
+            body.classList.add('light-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            const isLight = body.classList.contains('light-mode');
+            
+            // Ubah Ikon
+            themeToggle.innerHTML = isLight ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            
+            // Simpan ke LocalStorage
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        });
+    </script>
+
+</body>
+</html>

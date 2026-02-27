@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>create akun - Manajemen user</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Warna Neon Biru/Cyan (Digunakan sebagai warna utama bug) */
+            --neon-blue: #2563eb; /* Cyan */
+            --neon-blue-shadow: rgba(0, 255, 255, 0.7);
+            
+            --dark-background: #1a1a1a;
+            --delete-base: #FF6899; 
+            --delete-active: #FF6347; 
+            --text-color: #ffffff;
+            
+            /* Warna Alert (Sama dengan warna utama) */
+            --alert-button-base: #2563eb;
+        }
+
+        /* --- CSS Dasar dan Neon --- */
+        body {
+            background-color: #000000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: var(--text-color);
+            padding: 20px 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .bug-container {
+            width: 90%;
+            max-width: 450px;
+            padding: 15px;
+            border-radius: 15px;
+            background-color: var(--dark-background); 
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 20px var(--neon-blue-shadow);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue-shadow);
+            margin-bottom: 30px;
+            font-size: 1.2em;
+        }
+
+        h2 {
+            font-family: 'Press Start 2P', cursive;
+            color: var(--neon-blue);
+            text-align: left;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed var(--neon-blue-shadow);
+        }
+
+        .form-section {
+            background-color: #a2a2aaa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 1px solid var(--neon-blue-shadow);
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-color);
+            font-family: 'VT323', monospace;
+            font-size: 1.1em;
+        }
+
+        /* Update styling for all inputs including textarea */
+        input[type="text"], 
+        input[type="password"], 
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--neon-blue);
+            background-color: #000;
+            color: var(--neon-blue);
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-family: 'VT323', monospace;
+            font-size: 1.1em;
+            box-shadow: 0 0 5px var(--neon-blue-shadow);
+        }
+
+        textarea {
+            resize: vertical; /* Izinkan perubahan ukuran vertikal */
+            min-height: 100px;
+        }
+        
+        /* Menambahkan gaya untuk placeholder agar terlihat neon */
+        input::placeholder, textarea::placeholder {
+            color: rgba(0, 255, 255, 0.5); /* Warna cyan transparan */
+            font-family: 'VT323', monospace;
+            text-transform: uppercase;
+        }
+        
+        /* ================================================= */
+        /* GAYA DROPDOWN KUSTOM (SELECT ROLE AKUN) */
+        /* ================================================= */
+        #newRoleInput {
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        
+        #newRoleOptions {
+            /* Container untuk daftar opsi */
+            display: none; /* Default tersembunyi */
+            border: 1px solid var(--neon-blue-shadow);
+            background-color: #1a1a1a;
+            border-radius: 5px;
+            margin-top: -15px; /* Tarik ke atas menempel pada input */
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), 0 0 10px var(--neon-blue-shadow);
+        }
+
+        .role-option {
+            /* Gaya setiap item role */
+            padding: 10px;
+            color: var(--neon-blue);
+            font-family: 'VT323', monospace;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.1s;
+            border-bottom: 1px solid #333;
+            text-transform: uppercase;
+            text-align: center;
+        }
+        
+        .role-option:last-child {
+            border-bottom: none;
+        }
+
+        .role-option:hover {
+            background-color: #004444; 
+        }
+
+        .role-option.selected {
+            background-color: var(--neon-blue);
+            color: #000;
+            font-weight: bold;
+        }
+        /* ================================================= */
+
+
+        .neon-button {
+            background-color: var(--alert-button-base); 
+            color: #000000; 
+            padding: 12px 20px;
+            border: 2px solid var(--neon-blue);
+            border-radius: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7em;
+            box-shadow: 0 0 15px var(--neon-blue-shadow);
+            transition: background-color 0.2s, box-shadow 0.2s;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .neon-button:hover {
+            background-color: #2563eb; 
+            box-shadow: 0 0 20px var(--neon-blue-shadow), 0 0 5px var(--neon-blue);
+        }
+        
+        /* ================================================= */
+        /* CSS BARU UNTUK TOMBOL KECIL BIRU */
+        /* ================================================= */
+        .small-blue-button {
+            background-color: var(--neon-blue); 
+            color: #000000; 
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.6em; 
+            font-family: 'Press Start 2P', cursive;
+            text-transform: uppercase;
+            box-shadow: 0 0 8px var(--neon-blue-shadow);
+            display: inline-block;
+            margin-top: 5px;
+            text-decoration: none; /* Untuk link */
+        }
+
+        .small-blue-button:hover {
+            background-color: #2563eb; 
+            box-shadow: 0 0 12px var(--neon-blue-shadow);
+        }
+        /* ================================================= */
+
+
+        .neon-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            pointer-events: none;
+            box-shadow: none; 
+        }
+        
+        .loading-text {
+            display: inline-block;
+            overflow: hidden;
+            vertical-align: bottom;
+            text-align: center; 
+            width: 100%;
+        }
+
+        .full-width {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        /* --- Alert Kustom (Modal) --- */
+        .custom-alert-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .custom-alert-box {
+            background-color: #1a1a1a;
+            border: 3px solid var(--neon-blue);
+            box-shadow: 0 0 25px var(--neon-blue-shadow);
+            padding: 30px;
+            width: 80%;
+            max-width: 350px;
+            border-radius: 10px;
+            text-align: center;
+            font-family: 'VT323', monospace;
+            font-size: 1.2em;
+            white-space: pre-wrap; 
+        }
+
+        /* Teks dalam Modal */
+        .custom-alert-box p {
+            color: var(--neon-blue); /* Mengubah warna teks dalam modal menjadi neon biru */
+            text-shadow: 0 0 5px var(--neon-blue-shadow);
+            margin-bottom: 0;
+        }
+
+        /* Container Tombol di Modal */
+        .alert-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        /* Tombol OK/Umum */
+        .custom-alert-box button {
+            background-color: var(--alert-button-base);
+            border: 2px solid var(--neon-blue); /* Menambahkan border neon */
+            color: black; 
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7em;
+            box-shadow: 0 0 10px var(--neon-blue-shadow); /* Efek bayangan neon */
+            transition: background-color 0.2s, box-shadow 0.2s;
+            min-width: 90px;
+        }
+
+        /* Tombol Batal (Gaya yang sama dengan OK agar seragam neon) */
+        .custom-alert-box button.cancel-btn {
+            background-color: #333; /* Warna gelap untuk Batal */
+            color: var(--neon-blue);
+            border: 2px solid var(--neon-blue);
+        }
+        
+        /* Hover untuk semua tombol modal */
+        .custom-alert-box button:hover {
+            background-color: var(--neon-blue); 
+            color: black; 
+            box-shadow: 0 0 15px var(--neon-blue); 
+        }
+
+        .custom-alert-box button.cancel-btn:hover {
+             background-color: #555; 
+        }
+        
+        /* --- Daftar Akun (List) --- */
+        .account-list {
+            text-align: left;
+            padding: 15px;
+            border: 1px dashed var(--neon-blue-shadow);
+            border-radius: 5px;
+            margin-top: 5px; /* Dikecilkan agar dekat dengan kontrol paginasi */
+        }
+        
+        .account-info {
+            display: flex; 
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px dotted #3a3a3a;
+            font-family: 'VT323', monospace;
+            color: #2563eb;
+            line-height: 1.4; 
+        }
+
+        .account-info div {
+            flex-grow: 1;
+        }
+        
+        .account-info:last-child {
+            border-bottom: none;
+        }
+
+        .expired {
+            color: var(--delete-base); 
+        }
+        
+        /* Tombol Hapus Inline */
+        .inline-delete-btn {
+            background-color: var(--neon-blue); 
+            color: #000000; 
+            border: 1px solid var(--neon-blue);
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.65em; 
+            font-family: 'Press Start 2P', cursive;
+            transition: background-color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 0 5px var(--neon-blue-shadow); 
+            min-width: 70px; 
+            text-align: center;
+        }
+
+        .inline-delete-btn:hover {
+            background-color: var(--alert-button-base); 
+            box-shadow: 0 0 10px var(--neon-blue-shadow);
+        }
+        
+        /* Tombol Salin Inline */
+        .inline-copy-btn {
+            background-color: var(--neon-blue); 
+            color: #000000; 
+            border: 1px solid var(--neon-blue);
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.65em; 
+            font-family: 'Press Start 2P', cursive;
+            transition: background-color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 0 5px var(--neon-blue-shadow); 
+            min-width: 70px; 
+            text-align: center;
+            margin-right: 5px; 
+        }
+
+        .inline-copy-btn:hover {
+            background-color: var(--alert-button-base); 
+            box-shadow: 0 0 10px var(--neon-blue-shadow);
+        }
+
+        /* ================================================= */
+        /* CSS PAGINASI */
+        /* ================================================= */
+        #paginationControls {
+            text-align: center;
+            margin-top: -10px; 
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .pagination-button {
+            background-color: #333;
+            color: var(--neon-blue); 
+            border: 1px solid var(--neon-blue-shadow);
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7em; 
+            font-family: 'Press Start 2P', cursive;
+            transition: background-color 0.2s;
+        }
+
+        .pagination-button:hover:not(.active) {
+            background-color: #555;
+        }
+
+        .pagination-button.active {
+            background-color: var(--neon-blue); 
+            color: #000;
+            box-shadow: 0 0 8px var(--neon-blue-shadow);
+        }
+        /* ================================================= */
+        
+        /* ================================================= */
+        /* CSS BARU UNTUK BACKGROUND MUSIC */
+        /* ================================================= */
+        .music-bug {
+            width: 90%;
+            max-width: 450px;
+            padding: 15px;
+            border-radius: 20px;
+            background-color: var(--dark-background); 
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 20px var(--neon-blue-shadow);
+            margin-top: 20px; /* Jarak dari bug atas */
+            text-align: center;
+        }
+
+        .music-bug h2 {
+            font-family: 'Press Start 2P', cursive;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue-shadow);
+            margin-bottom: 25px;
+            font-size: 1.2em;
+            border-bottom: none; 
+        }
+
+        /* Ganti gaya Select */
+        .music-select {
+            width: 80%;
+            margin: 0 auto 20px auto;
+            padding: 10px 15px;
+            border: 1px solid var(--neon-blue);
+            background-color: #000;
+            color: var(--neon-blue);
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-family: 'VT323', monospace;
+            font-size: 1.1em;
+            box-shadow: 0 0 5px var(--neon-blue-shadow);
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .music-select option {
+            background-color: var(--dark-background);
+            color: var(--neon-blue);
+        }
+
+        /* Tombol Play/Pause */
+        .play-pause-button {
+            background: linear-gradient(90deg, #FFFF, #2563eb); /* Gradien Ungu */
+            color: #000000; 
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px; 
+            cursor: pointer;
+            text-transform: uppercase;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.9em;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+            transition: box-shadow 0.2s, transform 0.1s;
+            width: 100%;
+            max-width: 350px;
+            margin-bottom: 25px;
+        }
+
+        .play-pause-button:hover {
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+            transform: scale(1.02);
+        }
+
+        /* Kontrol Volume */
+        .volume-control-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px auto;
+            width: 90%;
+            max-width: 300px;
+        }
+
+        .volume-control-container span {
+            color: var(--neon-blue);
+            font-size: 1.2em;
+        }
+
+        .volume-slider {
+            flex-grow: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            background: #2563eb;
+            border-radius: 4px;
+            outline: none;
+            /* Neon track */
+            box-shadow: 0 0 5px var(--neon-blue-shadow); 
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--neon-blue);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--neon-blue);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        /* Teks waktu */
+        .time-display {
+            color: var(--neon-blue);
+            font-family: 'VT323', monospace;
+            font-size: 1em;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 350px;
+            margin: 10px auto 0 auto;
+        }
+        /* ================================================= */
+    </style>
+</head>
+<body>
+
+    <input type="hidden" id="telegramBotToken" value="8403098052:AAHoNelCuHdAaZJwYZQxH0kJPgkbC2hXOdg"> 
+    <input type="hidden" id="telegramPhotoUrl" value="https://files.catbox.moe/1unink.jpg">
+    
+    <div id="customAlert" class="custom-alert-overlay">
+        <div class="custom-alert-box">
+            <p id="alertMessage">Pesan</p>
+            <div id="alertButtons" class="alert-buttons">
+                 </div>
+        </div>
+    </div>
+
+    <div class="bug-container">
+        <h1>DHANZ X CRASHER</h1>
+        <p style="font-family: 'VT323', monospace; color: var(--neon-blue);">Akses Level: <span id="currentRole">...</span></p>
+        
+        
+        <div class="form-section" id="createAccountSection">
+            <h2>1. Buat Akun Baru</h2>
+            <form id="createAccountForm">
+                <label for="newRoleInput">Role Akun:</label>
+                <input type="text" id="newRoleInput" value="SELECT ROLE AKUN" readonly required>
+                <input type="hidden" id="newRole" name="newRole" value=""> 
+                
+                <div id="newRoleOptions">
+                    </div>
+                <label for="newUsername">Username:</label>
+                <input type="text" id="newUsername" placeholder="Masukan Username" required>
+
+                <label for="newPassword">Password (Akan Ditambah 3 Angka Acak):</label>
+                <input type="password" id="newPassword" placeholder="Masukan Password" required>
+         
+                <p style="font-size: 0.8em; color: #aaa; margin: 5px 0 10px 0; font-family: 'Arial', sans-serif;">
+                    TOLONG START BOT TERLEBIH DAHULU, AGAR BISA MENGIRIM AKUN
+                </p>
+                <a href="https://t.me/akun_dhanz_bot" target="_blank" class="small-blue-button" style="margin-bottom: 12px;">
+                    START BOT
+                </a>
+                <label for="newTelegramId">ID Telegram (Penerima):</label>
+                <input type="number" id="newTelegramId" placeholder="Masukan ID Telegram Target" required> 
+                
+                <label for="duration">Durasi (Hari):</label>
+                <input type="number" id="duration" min="1" value="30" required>
+
+                <button type="submit" id="createSubmitButton" class="neon-button full-width">BUAT AKUN</button>
+            </form>
+        </div>
+
+        <div class="form-section" id="editDurationSection">
+            <h2>2. Ganti Durasi Akun</h2> 
+            <form id="editDurationForm">
+                <label for="editUsername">Username Target:</label>
+                <input type="text" id="editUsername" required>
+
+                <label for="durationValue">Durasi Baru (Hari):</label> 
+                <input type="number" id="durationValue" min="1" value="30" required> 
+
+                <button type="submit" id="editDurationButton" class="neon-button full-width">GANTI DURASI</button> 
+            </form>
+        </div>
+        
+        <div class="form-section" id="broadcastSection">
+            <h2>3. Kirim Siaran ke Semua Member</h2>
+            <p style="font-size: 0.8em; color: #aaa; margin-bottom: 10px; font-family: 'Arial', sans-serif;">
+                📢 Siaran ini akan dikirim ke semua ID Telegram yang tersimpan saat pembuatan akun.
+            </p>
+            <textarea id="broadcastMessageInput" placeholder="Masukkan pesan siaran di sini..." rows="5"></textarea>
+
+            <button id="broadcastSubmitButton" class="neon-button full-width">KIRIM SIARAN</button>
+        </div>
+        <div class="form-section" id="accountListSection">
+            <h2>Daftar Akun Member</h2>
+            <div id="paginationControls"></div>
+            <div id="accountList" class="account-list">
+                <p style="text-align: center; color: #888;">Belum ada akun.</p>
+            </div>
+        </div>
+
+        <button onclick="window.location.href='dashboard.html'" class="neon-button full-width">KEMBALI KE BUG</button>
+
+    </div> 
+    
+    <div class="music-bug">
+        <h2>BACKGROUND MUSIC</h2>
+        
+        <select id="musicSelector" class="music-select">
+            <option value="" disabled selected>-- Pilih Musik --</option>
+            </select>
+
+        <button id="playPauseButton" class="play-pause-button">
+            ▶️ PLAY
+        </button>
+        
+        <div class="volume-control-container">
+            <span class="music-icon">🔈</span>
+            <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.01" value="0.5">
+            <span class="music-icon">🔊</span>
+        </div>
+        
+        <div class="time-display">
+            <span id="currentTime">0:00</span>
+            <span id="durationTime">0:00</span>
+        </div>
+    </div>
+    <script>
+        // =======================================================
+        // VARIABEL GLOBAL PAGINASI
+        // =======================================================
+        const ACCOUNTS_PER_PAGE = 3; 
+        let currentPage = 1; 
+        
+        const createSubmitButton = document.getElementById('createSubmitButton');
+        const editDurationButton = document.getElementById('editDurationButton'); 
+        const accountList = document.getElementById('accountList');
+        const telegramBotToken = document.getElementById('telegramBotToken').value;
+        const telegramPhotoUrl = document.getElementById('telegramPhotoUrl').value; 
+        const paginationControls = document.getElementById('paginationControls');
+        const customAlert = document.getElementById('customAlert');
+        const alertMessage = document.getElementById('alertMessage');
+        const alertButtons = document.getElementById('alertButtons');
+
+        // --- 1. Fungsi Alert Kustom (UPDATE) ---
+        function showAlert(message) {
+            alertMessage.innerHTML = message;
+            alertButtons.innerHTML = '<button onclick="customAlert.style.display = \'none\';">OK</button>';
+            customAlert.style.display = 'flex';
+        }
+        
+        // --- 1.5. Fungsi Confirm Kustom (BARU) ---
+        function showCustomConfirm(message, onConfirm, onCancel) {
+            alertMessage.innerHTML = message;
+            alertButtons.innerHTML = `
+                <button class="cancel-btn" id="confirmCancel">BATAL</button>
+                <button id="confirmOK">OKE</button>
+            `;
+            customAlert.style.display = 'flex';
+
+            document.getElementById('confirmOK').onclick = () => {
+                customAlert.style.display = 'none';
+                if (onConfirm) onConfirm();
+            };
+            
+            document.getElementById('confirmCancel').onclick = () => {
+                customAlert.style.display = 'none';
+                if (onCancel) onCancel();
+            };
+        }
+
+
+        // --- 2. Fungsi Utility Tanggal ---
+        function addDays(date, days) {
+            const result = new Date(date);
+            result.setDate(result.getDate() + parseInt(days));
+            return result;
+        }
+        
+        function formatDate(date) {
+            const d = new Date(date);
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${day}/${month}/${year}`;
+        }
+        
+        function isExpired(expiryDate) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); 
+            const expiry = new Date(expiryDate);
+            expiry.setHours(0, 0, 0, 0); 
+            return expiry.getTime() < today.getTime();
+        }
+        
+        function generateRandomNumberSuffix() {
+            return String(Math.floor(Math.random() * 1000)).padStart(3, '0');
+        }
+        
+        // --- 2.5. Fungsi Kirim Notifikasi Telegram (TEXT) ---
+        async function sendTelegramNotification(chatId, message) {
+            if (!telegramBotToken || telegramBotToken.includes("YOUR_TELEGRAM_BOT_TOKEN_HERE")) {
+                console.error("Konfigurasi Telegram Bot Token tidak lengkap. Notifikasi dilewati.");
+                return { success: true, message: "Token not set" };
+            }
+            
+            if (!chatId || chatId.trim().length === 0) {
+                 return { success: false, chatId: chatId, error: "not_available", description: "Chat ID kosong" };
+            }
+
+            const apiURL = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
+            const encodedMessage = encodeURIComponent(message);
+            const params = `chat_id=${chatId}&text=${encodedMessage}&parse_mode=HTML`;
+
+            try {
+                const response = await fetch(`${apiURL}?${params}`);
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ description: 'Gagal membaca respons error' }));
+                    
+                    const errorDesc = errorData.description ? errorData.description.toLowerCase() : '';
+                    const isChatError = (response.status === 400 && (errorDesc.includes('chat not found') || errorDesc.includes('user not found'))) || 
+                                        (response.status === 403 && errorDesc.includes('bot was blocked by the user'));
+                    
+                    if (isChatError) {
+                        return { 
+                            success: false, 
+                            chatId: chatId, 
+                            error: "not_available", 
+                            description: errorData.description
+                        };
+                    }
+                    
+                    console.error(`Gagal mengirim notifikasi Telegram ke ID ${chatId}. Status: ${response.status}, Error: ${errorData.description}`);
+                    return { success: false, chatId: chatId, error: "general_error", description: errorData.description };
+                }
+                
+                const data = await response.json();
+                if (!data.ok) {
+                    if (data.description.toLowerCase().includes('chat not found') || data.description.toLowerCase().includes('bot was blocked by the user')) {
+                         return { 
+                            success: false, 
+                            chatId: chatId, 
+                            error: "not_available", 
+                            description: data.description
+                        };
+                    }
+                    console.error(`Telegram API error: ${data.description}`);
+                    return { success: false, chatId: chatId, error: "general_error", description: data.description };
+                }
+                
+                console.log(`Notifikasi Telegram berhasil dikirim ke Chat ID: ${chatId}`, data);
+                return { success: true, chatId: chatId };
+
+            } catch (error) {
+                console.error(`Gagal mengirim notifikasi Telegram (Network/Fetch) ke ID ${chatId}:`, error);
+                return { success: false, chatId: chatId, error: "network_error", description: error.message };
+            }
+        }
+        
+        // --- Fungsi Kirim Notifikasi Telegram (FOTO) ---
+        async function sendTelegramPhoto(chatId, caption, photoUrl) {
+            if (!telegramBotToken || telegramBotToken.includes("YOUR_TELEGRAM_BOT_TOKEN_HERE")) {
+                console.error("Konfigurasi Telegram Bot Token tidak lengkap. Notifikasi dilewati.");
+                return { success: true, message: "Token not set" };
+            }
+            
+            if (!chatId || chatId.trim().length === 0) {
+                 return { success: false, chatId: chatId, error: "not_available", description: "Chat ID kosong" };
+            }
+
+            const apiURL = `https://api.telegram.org/bot${telegramBotToken}/sendPhoto`;
+            const encodedCaption = encodeURIComponent(caption);
+            const encodedPhoto = encodeURIComponent(photoUrl);
+            const params = `chat_id=${chatId}&photo=${encodedPhoto}&caption=${encodedCaption}&parse_mode=HTML`;
+
+            try {
+                const response = await fetch(`${apiURL}?${params}`);
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ description: 'Gagal membaca respons error' }));
+                    
+                    const errorDesc = errorData.description ? errorData.description.toLowerCase() : '';
+                    const isChatError = (response.status === 400 && (errorDesc.includes('chat not found') || errorDesc.includes('user not found'))) || 
+                                        (response.status === 403 && errorDesc.includes('bot was blocked by the user'));
+                    
+                    if (isChatError) {
+                        return { 
+                            success: false, 
+                            chatId: chatId, 
+                            error: "not_available", 
+                            description: errorData.description
+                        };
+                    }
+                    
+                    console.error(`Gagal mengirim Foto Telegram ke ID ${chatId}. Status: ${response.status}, Error: ${errorData.description}. Coba Kirim Teks Saja.`);
+                    // Fallback ke pesan teks jika pengiriman foto gagal
+                    return sendTelegramNotification(chatId, caption);
+                }
+                
+                const data = await response.json();
+                if (!data.ok) {
+                    if (data.description.toLowerCase().includes('chat not found') || data.description.toLowerCase().includes('bot was blocked by the user')) {
+                         return { 
+                            success: false, 
+                            chatId: chatId, 
+                            error: "not_available", 
+                            description: data.description
+                        };
+                    }
+                    console.error(`Telegram API error (Foto): ${data.description}`);
+                    return { success: false, chatId: chatId, error: "general_error", description: data.description };
+                }
+                
+                console.log(`Foto Telegram berhasil dikirim ke Chat ID: ${chatId}`, data);
+                return { success: true, chatId: chatId };
+
+            } catch (error) {
+                console.error(`Gagal mengirim Foto Telegram (Network/Fetch) ke ID ${chatId}:`, error);
+                 // Fallback ke pesan teks jika pengiriman foto gagal
+                return sendTelegramNotification(chatId, caption);
+            }
+        }
+
+
+        // --- 3. Fungsi Setup Paginasi ---
+        function setupPagination(accounts) {
+            paginationControls.innerHTML = '';
+            const totalPages = Math.ceil(accounts.length / ACCOUNTS_PER_PAGE);
+
+            if (totalPages <= 1) {
+                return; // Tidak perlu paginasi jika 1 halaman atau kurang
+            }
+
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.className = 'pagination-button';
+                button.setAttribute('data-page', i);
+
+                if (i === currentPage) {
+                    button.classList.add('active');
+                }
+
+                button.addEventListener('click', () => {
+                    currentPage = i;
+                    displayAccounts(currentPage);
+                });
+
+                paginationControls.appendChild(button);
+            }
+        }
+        
+        // --- 4. Tampilkan Daftar Akun (Diperbarui dengan Paginasi) ---
+        function displayAccounts(page = 1) {
+            const accounts = JSON.parse(localStorage.getItem('memberAccounts')) || [];
+            const currentUserRole = localStorage.getItem('userRole') || 'member';
+            const showManagementButtons = currentUserRole === 'developer'; 
+            
+            // 1. Setup Paginasi
+            setupPagination(accounts); 
+
+            // 2. Kalkulasi Akun yang akan ditampilkan
+            const startIndex = (page - 1) * ACCOUNTS_PER_PAGE;
+            const endIndex = startIndex + ACCOUNTS_PER_PAGE;
+            const accountsToShow = accounts.slice(startIndex, endIndex);
+            
+            accountList.innerHTML = ''; 
+
+            if (accounts.length === 0) {
+                accountList.innerHTML = '<p style="text-align: center; color: #888;">Belum ada akun.</p>';
+                return;
+            }
+
+            // 3. Tampilkan Akun Sesuai Halaman
+            accountsToShow.forEach(acc => {
+                let statusText;
+                let statusClass = '';
+                
+                if (acc.expiry) {
+                    const expired = isExpired(acc.expiry);
+                    const expiryDate = formatDate(acc.expiry);
+                    statusText = expired ? `(EXPIRED: ${expiryDate})` : `(Expired: ${expiryDate})`;
+                    statusClass = expired ? 'expired' : '';
+                } else {
+                    statusText = '(Durasi tidak terdefinisi)';
+                    statusClass = '';
+                }
+                
+                const accountDiv = document.createElement('div');
+                accountDiv.className = 'account-info ' + statusClass;
+                
+                let accountInfoHTML = `
+                    <div>
+                        👤 ${acc.username} <br>
+                        🔑 ${acc.password} <br>
+                        Role: ${acc.role.toUpperCase()} <br>
+                        ID TGM: ${acc.telegramId || 'N/A'} <span class="${statusClass}">${statusText}</span>
+                    </div>
+                `;
+                
+                if (showManagementButtons) {
+                    accountInfoHTML += `
+                        <div style="display: flex; gap: 5px;">
+                            <button class="inline-copy-btn" 
+                                data-username="${acc.username}" 
+                                data-password="${acc.password}"
+                                data-role="${acc.role.toUpperCase()}"
+                                data-expiry="${acc.expiry ? formatDate(acc.expiry) : 'N/A'}"
+                                >SALIN</button>
+                            <button class="inline-delete-btn" data-username="${acc.username}">HAPUS</button>
+                        </div>
+                    `;
+                }
+
+                accountDiv.innerHTML = accountInfoHTML;
+                accountList.appendChild(accountDiv);
+            });
+            
+             // Memastikan tombol aktif diperbarui setelah akun ditampilkan
+            document.querySelectorAll('.pagination-button').forEach(btn => {
+                btn.classList.remove('active');
+                if (parseInt(btn.getAttribute('data-page')) === currentPage) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+        
+        // --- 5. Isi Opsi Role (Tidak ada perubahan) ---
+        function populateRoleOptions(userRole) {
+            const newRoleOptionsDiv = document.getElementById('newRoleOptions');
+            
+            newRoleOptionsDiv.innerHTML = ''; 
+            
+            let creatableRoles = ['vip', 'reseller', 'member'];
+
+            if (userRole === 'reseller') {
+                creatableRoles = ['member']; 
+            } else if (userRole === 'vip') {
+                creatableRoles = ['reseller', 'member']; 
+            } else if (userRole === 'member') {
+                creatableRoles = ['member']; 
+            }
+            
+            
+            creatableRoles.forEach(role => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'role-option';
+                optionDiv.setAttribute('data-value', role);
+                optionDiv.textContent = role.toUpperCase();
+                newRoleOptionsDiv.appendChild(optionDiv);
+            });
+        }
+        
+        // 💡 Logika Buat Akun (UPDATE: MENYIMPAN TELEGRAM ID) 💡
+        document.getElementById('createAccountForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const newRole = document.getElementById('newRole').value; 
+            const newUsername = document.getElementById('newUsername').value;
+            let newPasswordBase = document.getElementById('newPassword').value; 
+            const newTelegramId = document.getElementById('newTelegramId').value.trim(); 
+            const duration = document.getElementById('duration').value;
+            
+            if (newRole === "") {
+                showAlert("⚠️ Harap pilih Role Akun terlebih dahulu!");
+                return;
+            }
+            
+            if (newTelegramId.length === 0) {
+                showAlert("⚠️ ID Telegram Target HARUS diisi. Pembuatan akun dibatalkan!");
+                return;
+            }
+
+            const newRandomSuffix = generateRandomNumberSuffix();
+            const newPassword = newPasswordBase + newRandomSuffix; 
+
+            let accounts = JSON.parse(localStorage.getItem('memberAccounts')) || [];
+            
+            if (accounts.some(acc => acc.username === newUsername)) {
+                showAlert(`⚠️ Username ${newUsername} sudah terdaftar!`);
+                return;
+            }
+
+            const originalButtonText = createSubmitButton.textContent;
+            createSubmitButton.disabled = true;
+            createSubmitButton.innerHTML = '<span class="loading-text">MEMUAT AKUN...</span>'; 
+
+            (async () => { 
+                
+                const targetUserIds = newTelegramId.split(',')
+                    .map(id => id.trim())
+                    .filter(id => id.length > 0 && !isNaN(id));
+                
+                
+                const expiryDate = addDays(new Date(), duration);
+                expiryDate.setHours(23, 59, 59, 999); 
+                const expiryDateDisplay = formatDate(expiryDate);
+                
+                let alertMessage = `✅ Akun  Berhasil Dibuat`
+                
+                if (targetUserIds.length > 0) {
+                    
+                    const finalTelegramMessage = 
+`<b>[ AKUN BARU BERHASIL DIBUAT ✅ ] </b>
+
+👤 <b>Username:</b> <code>${newUsername}</code>
+🔑 <b>Password:</b> <code>${newPassword}</code>
+🤖 <b>Role:</b> ${newRole.toUpperCase()}
+🗓️ <b>Expired:</b> ${expiryDateDisplay}
+
+ <b>tolong digunakan dengan bijak!!!</b>
+
+Dibuat oleh: ${localStorage.getItem('userRole') ? localStorage.getItem('userRole').toUpperCase() : 'UNKNOWN'}
+`;
+                    
+                    const sendFunction = (telegramPhotoUrl && telegramPhotoUrl.length > 0) 
+                        ? (id) => sendTelegramPhoto(id, finalTelegramMessage, telegramPhotoUrl) 
+                        : (id) => sendTelegramNotification(id, finalTelegramMessage); 
+                    
+                    const finalSendPromises = targetUserIds.map(sendFunction);
+                    const results = await Promise.all(finalSendPromises);
+                    
+                    const failedTargetIds = results.filter(result => 
+                        !result.success && result.error === "not_available"
+                    ).map(result => result.chatId);
+
+                    if (failedTargetIds.length > 0) {
+                        createSubmitButton.disabled = false;
+                        createSubmitButton.textContent = originalButtonText;
+                        
+                        const failedIdsString = failedTargetIds.join(', ');
+                        
+                        const failMessage = `❌ GAGAL TOTAL: Akun ${newUsername} Gagal Dibuat. ID Telegram Target TIDAK VALID: <b>${failedIdsString}</b>. Maaf id Telegram tidak ada, salah.`;
+                        
+                        showAlert(failMessage);
+                        return; 
+                    }
+                    
+                    alertMessage += "  ✉️ akun telah dikirim ke ID Telegram Target.";
+                }
+                
+                accounts.push({
+                    username: newUsername,
+                    password: newPassword, 
+                    role: newRole, 
+                    expiry: expiryDate.toISOString(),
+                    // BARU: Simpan ID Telegram yang digunakan saat pembuatan
+                    telegramId: targetUserIds.length > 0 ? targetUserIds[0] : ''
+                });
+
+                localStorage.setItem('memberAccounts', JSON.stringify(accounts));
+                
+                showAlert(alertMessage);
+                
+                // Reset form dan state
+                document.getElementById('createAccountForm').reset();
+                document.getElementById('newRoleInput').value = 'SELECT ROLE AKUN';
+                document.getElementById('newRole').value = '';
+                document.getElementById('newRoleOptions').style.display = 'none';
+
+                // Setelah membuat akun, tampilkan halaman pertama atau halaman baru
+                currentPage = 1; 
+                displayAccounts(); 
+
+                createSubmitButton.disabled = false;
+                createSubmitButton.textContent = originalButtonText;
+
+            })(); 
+        });
+        
+        // --- 6. Logika Edit Durasi Akun (Tidak Ada Perubahan) ---
+        document.getElementById('editDurationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const editUsername = document.getElementById('editUsername').value.trim();
+            const durationValue = parseInt(document.getElementById('durationValue').value);
+            
+            if (isNaN(durationValue) || durationValue <= 0) {
+                 showAlert("⚠️ Harap masukkan nilai durasi yang valid (angka positif).");
+                 return;
+            }
+            
+            let accounts = JSON.parse(localStorage.getItem('memberAccounts')) || [];
+            const accountIndex = accounts.findIndex(acc => acc.username === editUsername);
+
+            if (accountIndex === -1) {
+                showAlert(`⚠️ Username ${editUsername} tidak ditemukan!`);
+                return;
+            }
+            
+            const originalButtonText = editDurationButton.textContent;
+            editDurationButton.disabled = true;
+            editDurationButton.innerHTML = '<span class="loading-text">MEMUAT...</span>'; 
+
+            setTimeout(() => {
+                let newExpiryDate = addDays(new Date(), durationValue);
+                newExpiryDate.setHours(23, 59, 59, 999); 
+                
+                accounts[accountIndex].expiry = newExpiryDate.toISOString();
+
+                localStorage.setItem('memberAccounts', JSON.stringify(accounts));
+
+                const newExpiryDateDisplay = new Date(accounts[accountIndex].expiry);
+
+                showAlert(`✅ Durasi Akun ${editUsername} Berhasil  Diatur ke: ${durationValue} hari. Expired Baru: ${formatDate(newExpiryDateDisplay)}`);
+                this.reset();
+                
+                // Setelah mengedit, tampilkan kembali halaman saat ini
+                displayAccounts(currentPage);
+
+                editDurationButton.disabled = false;
+                editDurationButton.textContent = originalButtonText;
+            }, 1500);
+        });
+
+        // --- 7. Logika Hapus Akun (UPDATE: MENGGUNAKAN CONFIRM KUSTOM) ---
+        function deleteAccount(deleteUsername) {
+            let accounts = JSON.parse(localStorage.getItem('memberAccounts')) || [];
+            const initialLength = accounts.length;
+            
+            accounts = accounts.filter(acc => acc.username !== deleteUsername);
+
+            if (accounts.length === initialLength) {
+                showAlert(`⚠️ Username ${deleteUsername} tidak ditemukan!`);
+                return;
+            }
+
+            localStorage.setItem('memberAccounts', JSON.stringify(accounts));
+
+            showAlert(`🗑️ Akun ${deleteUsername} Berhasil Dihapus!`);
+            
+            // Cek apakah halaman saat ini kosong setelah dihapus
+            const totalPages = Math.ceil(accounts.length / ACCOUNTS_PER_PAGE);
+            if (currentPage > totalPages && currentPage > 1) {
+                currentPage = totalPages; 
+            }
+            
+            displayAccounts(currentPage); 
+        }
+        
+        // --- 8. Logika Salin Akun (Tidak ada perubahan) ---
+        function copyAccount(username, password, role, expiry) {
+            const textToCopy = 
+`[ AKUN XJTM CRASHER ]
+👤 Username: ${username}
+🔑 Password: ${password}
+🤖 Role: ${role}
+📅 Expired: ${expiry}
+-------------------------
+*PASTIKAN Anda login sebelum tanggal expired.*`;
+
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    showAlert(`📋 Berhasil menyalin data akun ${username} ke clipboard!`);
+                })
+                .catch(err => {
+                    console.error('Gagal menyalin:', err);
+                    showAlert(`⚠️ Gagal menyalin ke clipboard. Silakan salin manual: ${textToCopy}`);
+                });
+        }
+
+        // =======================================================
+        // LOGIKA BARU UNTUK FITUR SIARAN (BROADCAST) - TELAH DIUPDATE
+        // =======================================================
+
+        const broadcastSubmitButton = document.getElementById('broadcastSubmitButton');
+        const broadcastMessageInput = document.getElementById('broadcastMessageInput');
+
+        async function broadcastMessage() {
+            const message = broadcastMessageInput.value.trim();
+            
+            if (message.length === 0) {
+                showAlert("⚠️ Pesan siaran tidak boleh kosong!");
+                return;
+            }
+            
+            // 1. Ambil SEMUA akun dari localStorage
+            const allAccounts = JSON.parse(localStorage.getItem('memberAccounts')) || [];
+
+            // 2. Kumpulkan ID Telegram unik dari semua akun
+            const allMemberIds = allAccounts
+                .map(acc => acc.telegramId) // Ambil ID Telegram dari setiap akun
+                .filter(id => id && id.length > 0 && !isNaN(id)); // Filter ID yang valid (tidak kosong & angka)
+
+            const uniqueTargetIds = new Set(allMemberIds); 
+            const finalTargetIds = Array.from(uniqueTargetIds);
+            
+            if (finalTargetIds.length === 0) {
+                showAlert("⚠️ Tidak ada ID Telegram anggota yang tersimpan untuk siaran. Silakan buat akun dengan ID Telegram yang valid terlebih dahulu.");
+                return;
+            }
+
+            const originalButtonText = broadcastSubmitButton.textContent;
+            broadcastSubmitButton.disabled = true;
+            broadcastSubmitButton.innerHTML = '<span class="loading-text">MENGIRIM SIARAN...</span>';
+
+            const formattedMessage = `<b>[ PENGUMUMAN SIARAN DHANZ X CRASHER ]</b>\n\n${message}`;
+
+            let successCount = 0;
+            let failureCount = 0;
+            const failedIds = [];
+            
+            // Loop dan kirim pesan ke setiap ID
+            const sendPromises = finalTargetIds.map(chatId => 
+                sendTelegramNotification(chatId, formattedMessage)
+            );
+
+            const results = await Promise.all(sendPromises);
+
+            results.forEach(result => {
+                if (result.success) {
+                    successCount++;
+                } else {
+                    failureCount++;
+                    failedIds.push(result.chatId || 'N/A');
+                }
+            });
+            
+            // Reset tombol
+            broadcastSubmitButton.disabled = false;
+            broadcastSubmitButton.textContent = originalButtonText;
+            broadcastMessageInput.value = ''; // Kosongkan input setelah kirim
+
+            let alertMsg = `✅ Siaran Berhasil Terkirim ke ${successCount} anggota.`;
+            if (failureCount > 0) {
+                alertMsg += ` ❌ Gagal dikirim ke ${failureCount} ID (Bot diblokir/ID tidak valid).`;
+                console.warn("Gagal kirim ke ID berikut:", failedIds);
+            }
+            
+            showAlert(alertMsg);
+        }
+
+        // Event Listener untuk tombol siaran
+        if (broadcastSubmitButton) {
+            broadcastSubmitButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                
+                // Ambil ID anggota saat ini untuk konfirmasi
+                const allAccounts = JSON.parse(localStorage.getItem('memberAccounts')) || [];
+                const allMemberIds = allAccounts.map(acc => acc.telegramId).filter(id => id && id.length > 0);
+                const uniqueTargetIds = new Set(allMemberIds); 
+
+                if (uniqueTargetIds.size === 0) {
+                    showAlert("⚠️ Tidak ada ID Telegram anggota yang tersimpan untuk siaran. Silakan buat akun dengan ID Telegram yang valid terlebih dahulu.");
+                    return;
+                }
+                
+                // Konfirmasi sebelum mengirim siaran
+                showCustomConfirm(
+                    `📢 Anda akan mengirim siaran ke ${uniqueTargetIds.size} ID Anggota terdaftar. Lanjutkan?`,
+                    broadcastMessage
+                );
+            });
+        }
+        
+        
+        // =======================================================
+        // LOGIKA BARU UNTUK PEMUTAR MUSIK LATAR
+        // =======================================================
+        
+        const musicData = [
+            { name: "anime", url: "https://files.catbox.moe/0fexsl.mp4" },
+            { name: "ransom", url: "https://files.catbox.moe/dlc98a.mp3" },
+            { name: "ojing", url: "http://tmpfiles.org/dl/23212678/1770571041685.mp3" },
+            { name: "Synthwave Cruise", url: "https://files.catbox.moe/c7a9v4.mp3" } 
+        ];
+
+        const audio = new Audio();
+        const musicSelector = document.getElementById('musicSelector');
+        const playPauseButton = document.getElementById('playPauseButton');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const currentTimeDisplay = document.getElementById('currentTime');
+        const durationTimeDisplay = document.getElementById('durationTime');
+        
+        // --- Utility untuk format waktu (Detik -> M:SS) ---
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            const paddedSeconds = String(remainingSeconds).padStart(2, '0');
+            return `${minutes}:${paddedSeconds}`;
+        }
+
+        // --- 1. Isi Dropdown Musik ---
+        function populateMusicSelector() {
+            musicData.forEach((track, index) => {
+                const option = document.createElement('option');
+                option.value = track.url;
+                option.textContent = `${index + 1}. ${track.name}`;
+                musicSelector.appendChild(option);
+            });
+        }
+
+        // --- 2. Kontrol Play/Pause ---
+        function togglePlayPause() {
+            if (audio.paused) {
+                if (audio.src === "" && musicData.length > 0) {
+                    // Jika belum ada musik yang dipilih, pilih yang pertama 
+                    audio.src = musicData[0].url;
+                    musicSelector.value = musicData[0].url;
+                } else if (audio.src === "") {
+                     showAlert("⚠️ Tidak ada musik yang tersedia.");
+                     return;
+                }
+                
+                audio.play()
+                    .then(() => {
+                        playPauseButton.innerHTML = '⏸️ PAUSE';
+                    })
+                    .catch(error => {
+                        console.error("Gagal memutar musik:", error);
+                        // Autoplay diblokir, minta user berinteraksi
+                        playPauseButton.innerHTML = '▶️ PLAY'; 
+                        showAlert("⚠️ Browser memblokir pemutaran otomatis. Tekan tombol lagi.");
+                    });
+            } else {
+                audio.pause();
+                playPauseButton.innerHTML = '▶️ PLAY';
+            }
+        }
+        
+        // --- Panggil fungsi saat halaman dimuat ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const userRole = localStorage.getItem('userRole') || 'member'; 
+            document.getElementById('currentRole').textContent = userRole.toUpperCase();
+            
+            const accountListSection = document.getElementById('accountListSection');
+            const editDurationSection = document.getElementById('editDurationSection'); 
+            const broadcastSection = document.getElementById('broadcastSection'); // Ambil elemen siaran
+            
+            if (userRole !== 'developer') {
+                if (editDurationSection) {
+                    editDurationSection.style.display = 'none';
+                }
+                
+                if (accountListSection) {
+                    accountListSection.style.display = 'none';
+                }
+                
+                // Sembunyikan fitur siaran jika bukan developer
+                if (broadcastSection) {
+                    broadcastSection.style.display = 'none';
+                }
+            } else {
+                 // Pastikan fitur siaran terlihat jika developer
+                if (broadcastSection) {
+                    broadcastSection.style.display = 'block';
+                }
+            }
+            
+            populateRoleOptions(userRole); 
+            displayAccounts(currentPage); 
+            
+            
+            // =======================================================
+            // LOGIKA DROPDOWN KUSTOM & SMOOTH SCROLL 
+            // =======================================================
+            const newRoleInput = document.getElementById('newRoleInput');
+            const newRoleOptions = document.getElementById('newRoleOptions');
+            const newRoleHidden = document.getElementById('newRole');
+            const createAccountSection = document.getElementById('createAccountSection');
+            
+            newRoleInput.addEventListener('click', function() {
+                const isVisible = newRoleOptions.style.display === 'block';
+                
+                if (isVisible) {
+                    newRoleOptions.style.display = 'none';
+                } else {
+                    newRoleOptions.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        createAccountSection.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start'      
+                        });
+                    }, 50); 
+                }
+            });
+
+            newRoleOptions.addEventListener('click', function(event) {
+                if (event.target.classList.contains('role-option')) {
+                    const selectedValue = event.target.getAttribute('data-value');
+                    const selectedText = event.target.textContent;
+                    
+                    newRoleHidden.value = selectedValue;
+                    newRoleInput.value = selectedText;
+                    
+                    newRoleOptions.style.display = 'none';
+                }
+            });
+            
+            // 3. Delegasi Event untuk Tombol Hapus dan Salin Inline (UPDATE)
+            accountList.addEventListener('click', function(event) {
+                if (event.target.classList.contains('inline-delete-btn')) {
+                    const usernameToDelete = event.target.getAttribute('data-username');
+                    
+                    // MENGGANTI confirm() DENGAN showCustomConfirm()
+                    showCustomConfirm(
+                        `Apakah Anda yakin ingin menghapus akun ${usernameToDelete}? Tindakan ini tidak dapat dibatalkan.`,
+                        () => {
+                            // Fungsi saat OKE diklik
+                            deleteAccount(usernameToDelete);
+                        }
+                        // Tidak perlu fungsi onCancel karena defaultnya hanya menutup modal
+                    );
+
+                } else if (event.target.classList.contains('inline-copy-btn')) {
+                    const btn = event.target;
+                    const username = btn.getAttribute('data-username');
+                    const password = btn.getAttribute('data-password');
+                    const role = btn.getAttribute('data-role');
+                    const expiry = btn.getAttribute('data-expiry');
+                    copyAccount(username, password, role, expiry);
+                }
+            });
+            
+            // =======================================================
+            // LOGIKA BARU UNTUK PEMUTAR MUSIK LATAR (DOM READY)
+            // =======================================================
+            populateMusicSelector();
+
+            playPauseButton.addEventListener('click', togglePlayPause);
+            
+            volumeSlider.addEventListener('input', function() {
+                audio.volume = this.value;
+            });
+            
+            musicSelector.addEventListener('change', function() {
+                audio.src = this.value;
+                audio.play()
+                    .then(() => {
+                        playPauseButton.innerHTML = '⏸️ PAUSE';
+                    })
+                    .catch(error => {
+                        console.error("Gagal memuat atau memutar musik:", error);
+                        playPauseButton.innerHTML = '▶️ PLAY';
+                        showAlert("⚠️ Gagal memuat musik. Cek tautan URL.");
+                    });
+            });
+            
+            // Perbarui tampilan waktu saat musik dimuat
+            audio.addEventListener('loadedmetadata', () => {
+                durationTimeDisplay.textContent = formatTime(audio.duration);
+            });
+
+            // Perbarui tampilan waktu saat musik diputar
+            audio.addEventListener('timeupdate', () => {
+                currentTimeDisplay.textContent = formatTime(audio.currentTime);
+            });
+            
+            // Loop musik saat selesai
+            audio.addEventListener('ended', () => {
+                audio.currentTime = 0;
+                audio.play(); 
+            });
+
+            // Atur volume awal
+            audio.volume = volumeSlider.value;
+            
+        });
+    </script>
+    
+</body>
+</html>

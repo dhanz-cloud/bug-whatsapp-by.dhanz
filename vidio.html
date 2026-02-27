@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Autoplay Otomatis (Tanpa Overlay)</title>
+    <style>
+        /* CSS untuk memastikan video menutupi seluruh layar */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; 
+            background-color: #000;
+        }
+        #fullscreenVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+        }
+        /* Overlay CSS telah dihapus atau disembunyikan sepenuhnya */
+        /* #overlay { display: none; } */ 
+    </style>
+</head>
+<body>
+
+    <video 
+        id="fullscreenVideo" 
+        src="https://files.catbox.moe/ilupw0.mp4" 
+        autoplay 
+        loop 
+        muted 
+        playsinline
+        preload="auto"
+    ></video>
+
+    <script>
+        const videoElement = document.getElementById('fullscreenVideo');
+        // const overlay = document.getElementById('overlay'); // Overlay tidak lagi ada
+
+        // Fungsi untuk meminta mode full screen
+        function goFullScreen() {
+            const docEl = document.documentElement;
+            // Coba Full Screen pada elemen HTML utama
+            if (docEl.requestFullscreen) {
+                docEl.requestFullscreen();
+            } else if (docEl.webkitRequestFullscreen) {
+                docEl.webkitRequestFullscreen();
+            } else if (docEl.mozRequestFullScreen) {
+                docEl.mozRequestFullScreen();
+            }
+        }
+
+        // --- Logika Autoplay Otomatis Saat Halaman Dimuat ---
+
+        window.onload = function() {
+            // Kita mencoba memutar video. 
+            // Karena 'muted' diatur di tag video, autoplay kemungkinan besar akan berhasil.
+            // Namun, browser mungkin tetap memblokir jika dianggap mengganggu.
+            const playPromise = videoElement.play();
+
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    // Video berhasil diputar secara otomatis (kemungkinan besar dalam keadaan Muted)
+                    console.log("Video berhasil diputar secara otomatis (muted).");
+                    // Sekarang, coba masuk ke Full Screen
+                    goFullScreen();
+                    // Dan coba aktifkan suara (ini sering diblokir tanpa interaksi)
+                    videoElement.muted = false; 
+                }).catch(error => {
+                    // Autoplay atau Full Screen diblokir sepenuhnya oleh browser tanpa interaksi
+                    console.error("Autoplay atau Full Screen diblokir tanpa interaksi pengguna:", error);
+                    // Anda mungkin perlu menambahkan instruksi manual di sini jika ini sering terjadi
+                    // Contoh: document.body.innerHTML = '<h1>Klik di mana saja untuk memulai video.</h1>';
+                });
+            }
+        };
+
+        // Jika Anda ingin mengizinkan pengguna mengklik di mana saja di halaman untuk memulai,
+        // Anda bisa tambahkan ini, tetapi itu adalah interaksi pengguna.
+        // document.addEventListener('click', function() {
+        //     if (videoElement.paused) {
+        //         videoElement.play();
+        //         videoElement.muted = false;
+        //         goFullScreen();
+        //     }
+        // });
+
+    </script>
+
+</body>
+</html>
